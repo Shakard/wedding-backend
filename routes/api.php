@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('user/{user}' , [UserController::class, 'destroy3']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);
+    Route::post('add-user', [UserController::class, 'storeUser']);
+
 
 
     //Tables Routes

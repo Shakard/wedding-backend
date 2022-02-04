@@ -22,6 +22,20 @@ class DocumentUploadedController extends Controller
         $user->notify(new DocumentUploaded($documentUploadedData));
     }
 
+    public function  sendNotificationPassword($id, $email, $password) 
+    {   
+        $user=User::find($id);
+
+        $documentUploadedData = [
+            'body' => 'Has recibido una notificacion de prueba',
+            'documentUploadedText' => 'Su usuario es: ' . $email . ' y su contraseña es: ' . $password,
+            'url' => url('/'),
+            'thankYou' => 'Gracias por su atención'
+        ];
+
+        $user->notify(new DocumentUploaded($documentUploadedData));
+    }
+
     public function  sendNotificationApproved($id) 
     {   
         $user=User::find($id);

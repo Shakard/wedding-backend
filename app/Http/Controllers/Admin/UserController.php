@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUpdateUser;
-use App\Models\Chair;
+use App\Http\Controllers\DocumentUploadedController;
 use Spatie\Permission\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -31,8 +30,8 @@ class UserController extends Controller
         $data = User::orderBy('id', 'DESC')->paginate(5);
         return view('users.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
-    }    
-    
+    }
+
 
     public function create()
 
@@ -257,12 +256,14 @@ class UserController extends Controller
        ----------Api Methods-----------
        --------------------------------*/
 
-    public function loggedUser(){
+    public function loggedUser()
+    {
         $user = auth()->user();
 
         return response()->json([
-        'data' => $user,
-        'message' =>'success']);
+            'data' => $user,
+            'message' => 'success'
+        ]);
     }
 
     public function getUsers()
@@ -281,13 +282,13 @@ class UserController extends Controller
     public function searchByParameters(Request $request)
     {
         $users = User::with('chair.table')->role('Guest')
-        ->when($request->table, function ($query) use ($request) {
-            $query->where('chair', $request->table);
-        })
-        ->when($request->chair, function ($query) use ($request) {
-            $query->where('chair.id', $request->chair);
-        })
-        ->get();
+            ->when($request->table, function ($query) use ($request) {
+                $query->where('chair', $request->table);
+            })
+            ->when($request->chair, function ($query) use ($request) {
+                $query->where('chair.id', $request->chair);
+            })
+            ->get();
 
         return response()->json(
             [
@@ -301,7 +302,7 @@ class UserController extends Controller
     public function getGuests()
     {
         $users = User::with('chair.table')->role('Guest')
-        ->get();
+            ->get();
 
         return response()->json(
             [
@@ -315,37 +316,19 @@ class UserController extends Controller
     public function storeUser(Request $request)
 
     {
-
-        $this->validate($request, [
-
-            'name' => 'required',
-
-            'email' => 'required|email|unique:users,email',
-
-            'password' => 'required|same:confirm-password',
-
-            'roles' => 'required'
-
-        ]);
-
-    
-
-        $input = $request->all();
-
-        $input['password'] = FacadesHash::make($input['password']);
-
-    
-
-        $user = User::create($input);
-
-        $user->assignRole($request->input('roles'));
-
-    
-
-        return redirect()->route('users.index')
-
-                        ->with('success','User created successfully');
-
+        $notify = new DocumentUploadedController();
+        $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+        $password = substr($random, 0, 8);
+        $hashed_random_password = FacadesHash::make($password);
+        $user = new User();
+        $user->name = $request->input('user.name');
+        $user->email = $request->input('user.email');        
+        $user->password = $hashed_random_password;
+        $user->save();
+        $user->assignRole('Guest');
+        $userId = $user->id;
+        $email = $user->email;
+        $notify->sendNotificationPassword($userId, $email, $password);
     }
 
 
@@ -353,7 +336,7 @@ class UserController extends Controller
     {
         $user->name = $request->input('user.name');
         $user->email = $request->input('user.email');
-        $user->save();        
+        $user->save();
         $user->assignRole($request->input('roles'));
 
         return response()->json([
@@ -365,7 +348,7 @@ class UserController extends Controller
 
     public function destroy3($id)
     {
-        $user = User::find($id);        
+        $user = User::find($id);
         $user->delete();
 
         return response()->json([
@@ -374,21 +357,32 @@ class UserController extends Controller
                 'summary' => 'Usuario eliminado',
                 'detail' => 'El usuario fue eliminado exitósamente',
                 'code' => '201'
-            ]], 201);     
+            ]
+        ], 201);
     }
 
-    public function importUsers(Request $request) {
+    public function importUsers(Request $request)
+    {
+        $notify = new DocumentUploadedController();
         $users = $request->data;
         User::insert($users);
         $importedUsers =  count($users);
         $newUsers = User::orderBy('id', 'desc')->take($importedUsers)->get();
+        $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
         foreach ($newUsers as $user) {
+            $password = substr($random, 0, 8);
+            $hashed_random_password = FacadesHash::make($password);
+            $user->password = $hashed_random_password;
+            $user->update();
             $user->assignRole('Guest');
+            $userId = $user->id;
+            $email = $user->email;
+            $notify->sendNotificationPassword($userId, $email, $password);
         }
 
-        // $user->assignRole($request->input('roles'));
-
         return response()->json([
+
+
             'summary' => 'success',
             'code' => '201',
             'data' => $users
