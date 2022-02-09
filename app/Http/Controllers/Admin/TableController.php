@@ -118,8 +118,8 @@ class TableController extends Controller
         return response()->json([
             'data' => $table,
             'msg' => [
-                'summary' => 'Usuario eliminado',
-                'detail' => 'El usuario fue eliminado exitósamente',
+                'summary' => 'Mesa eliminada',
+                'detail' => 'La mesa fue eliminada exitósamente',
                 'code' => '201'
             ]
         ], 201);

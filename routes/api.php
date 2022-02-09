@@ -51,9 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);
     Route::post('add-user', [UserController::class, 'storeUser']);
-
-
-
+    
     //Tables Routes
     Route::get('tables', [TableController::class, 'getTables']);
     Route::get('group-tables', [TableController::class, 'getGroupedTablesChairs']);
