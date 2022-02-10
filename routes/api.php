@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('change-password', [ChangePasswordController::class, 'changePasswordApi']);
     Route::get('logged-user', [UserController::class, 'loggedUser']);    
     Route::put('user/{user}' , [UserController::class, 'update2']);
-    Route::delete('user/{user}' , [UserController::class, 'destroy3']);
+    Route::any('user/{user}' , [UserController::class, 'destroy3']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);
     Route::post('add-user', [UserController::class, 'storeUser']);
@@ -67,9 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('add-user/{chair}', [ChairController::class, 'addUser']);
     Route::get('chair-user', [ChairController::class, 'getChairsUsers']);    
     Route::get('chairs-by-table/{table}', [ChairController::class, 'getChairsByTable']);    
-    Route::post('store-chair-by-number', [ChairController::class, 'storeChairByNumber']);
-
-    
+    Route::post('store-chair-by-number', [ChairController::class, 'storeChairByNumber']);    
 });
 
 

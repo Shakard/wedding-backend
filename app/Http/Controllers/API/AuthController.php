@@ -20,6 +20,14 @@ class AuthController extends Controller
         // ]);
 
         $user = new User();
+
+
+        // $user->first_name = $request->input('first_name');
+        // $user->last_name = $request->input('last_name');
+        // $user->confirmation = $request->input('confirmation');        
+        // $user->phone = $request->input('phone');   
+        // $user->email = $request->input('email');
+        // $user->password = Hash::make($request->input('password'));
         $user->first_name = $request->input('user.first_name');
         $user->last_name = $request->input('user.last_name');
         $user->confirmation = $request->input('user.confirmation');        

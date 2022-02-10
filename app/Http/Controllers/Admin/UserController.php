@@ -315,7 +315,7 @@ class UserController extends Controller
 
     public function storeUser(Request $request)
 
-    {
+    {   
         $notify = new DocumentUploadedController();
         $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
         $password = substr($random, 0, 8);
@@ -332,7 +332,7 @@ class UserController extends Controller
         $user->createToken('weddingToken')->plainTextToken;
         $userId = $user->id;
         $email = $user->email;
-        $notify->sendNotificationPassword($userId, $email, $password);
+        $notify->sendNotificationPassword($userId, $email, $password, 4);
     }
 
 
@@ -372,51 +372,64 @@ class UserController extends Controller
         User::insert($users);
         $numberOfNewUsers =  count($users);
         $newUsers = User::orderBy('id', 'desc')->take($numberOfNewUsers)->get();
-        if (count($newUsers) > 5) {
-            while (count($newUsers) > 5) {
-                $takeUsers = User::where('updated_at', null)
-                    ->orderBy('id', 'desc')
-                    ->take(5)->get();
-                foreach ($takeUsers as $user) {
-                    $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-                    $password = substr($random, 0, 8);
-                    $hashed_random_password = FacadesHash::make($password);
-                    $user->password = $hashed_random_password;
-                    $user->update();
-                    $user->assignRole('Guest');
-                    $userId = $user->id;
-                    $email = $user->email;
-                    $notify->sendNotificationPassword($userId, $email, $password);
-                }
-                $newUsers = User::where('updated_at', null)
-                    ->orderBy('id', 'desc')->get();
-                sleep(11);
-                if (count($newUsers) <= 5) {
-                    foreach ($newUsers as $user) {
-                        $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-                        $password = substr($random, 0, 8);
-                        $hashed_random_password = FacadesHash::make($password);
-                        $user->password = $hashed_random_password;
-                        $user->update();
-                        $user->assignRole('Guest');
-                        $userId = $user->id;
-                        $email = $user->email;
-                        $notify->sendNotificationPassword($userId, $email, $password);
-                    }
-                }
-            }
-        } else {
-            foreach ($newUsers as $user) {
-                $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-                $password = substr($random, 0, 8);
-                $hashed_random_password = FacadesHash::make($password);
-                $user->password = $hashed_random_password;
-                $user->update();
-                $user->assignRole('Guest');
-                $userId = $user->id;
-                $email = $user->email;
-                $notify->sendNotificationPassword($userId, $email, $password);
-            }
+        // if (count($newUsers) > 5) {
+        //     while (count($newUsers) > 5) {
+        //         $takeUsers = User::where('updated_at', null)
+        //             ->orderBy('id', 'desc')
+        //             ->take(5)->get();
+        //         foreach ($takeUsers as $user) {
+        //             $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+        //             $password = substr($random, 0, 8);
+        //             $hashed_random_password = FacadesHash::make($password);
+        //             $user->password = $hashed_random_password;
+        //             $user->update();
+        //             $user->assignRole('Guest');
+        //             $userId = $user->id;
+        //             $email = $user->email;
+        //             $notify->sendNotificationPassword($userId, $email, $password);
+        //         }
+        //         $newUsers = User::where('updated_at', null)
+        //             ->orderBy('id', 'desc')->get();
+        //         sleep(11);
+        //         if (count($newUsers) <= 5) {
+        //             foreach ($newUsers as $user) {
+        //                 $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+        //                 $password = substr($random, 0, 8);
+        //                 $hashed_random_password = FacadesHash::make($password);
+        //                 $user->password = $hashed_random_password;
+        //                 $user->update();
+        //                 $user->assignRole('Guest');
+        //                 $userId = $user->id;
+        //                 $email = $user->email;
+        //                 $notify->sendNotificationPassword($userId, $email, $password);
+        //             }
+        //         }
+        //     }
+        // } else {
+        //     foreach ($newUsers as $user) {
+        //         $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+        //         $password = substr($random, 0, 8);
+        //         $hashed_random_password = FacadesHash::make($password);
+        //         $user->password = $hashed_random_password;
+        //         $user->update();
+        //         $user->assignRole('Guest');
+        //         $userId = $user->id;
+        //         $email = $user->email;
+        //         $notify->sendNotificationPassword($userId, $email, $password);
+        //     }
+        // }
+        $seconds= 0;
+        foreach ($newUsers as $user) {
+            $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+            $password = substr($random, 0, 8);
+            $hashed_random_password = FacadesHash::make($password);
+            $user->password = $hashed_random_password;
+            $user->update();
+            $user->assignRole('Guest');
+            $userId = $user->id;
+            $email = $user->email;
+            $seconds = $seconds+4;
+            $notify->sendNotificationPassword($userId, $email, $password, $seconds);
         }
 
         return response()->json([

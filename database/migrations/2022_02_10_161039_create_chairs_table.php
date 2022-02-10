@@ -14,16 +14,17 @@ class CreateChairsTable extends Migration
     public function up()
     {
         Schema::create('chairs', function (Blueprint $table) {
-            $table->engine="innoDB";
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->bigInteger('table_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
-            $table->string('name');   
+            $table->string('name');
             $table->string('code')->default('0');
             $table->timestamps();
+        });
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
+        Schema::table('chairs', function ($table) {
             $table->foreign('table_id')->references('id')->on('tables')->onDelete("cascade");
+            $table->foreign('user_id')->references('id')->on('users')->onDelete("set null");
         });
     }
 

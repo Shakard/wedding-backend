@@ -11,6 +11,7 @@ class DocumentUploaded extends Notification implements ShouldQueue
 {
     use Queueable;
     private $documentUploadedData;
+    public $tries = 5;
 
     /**
      * Create a new notification instance.

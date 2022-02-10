@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Notifications\DocumentUploaded;
 use App\User;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DocumentUploadedController extends Controller
 {
@@ -22,7 +22,7 @@ class DocumentUploadedController extends Controller
         $user->notify(new DocumentUploaded($documentUploadedData));
     }
 
-    public function  sendNotificationPassword($id, $email, $password) 
+    public function  sendNotificationPassword($id, $email, $password, $seconds) 
     {   
         $user=User::find($id);
 
@@ -33,7 +33,8 @@ class DocumentUploadedController extends Controller
             'thankYou' => 'Gracias por su atención'
         ];
 
-        $user->notify(new DocumentUploaded($documentUploadedData));
+        $time = Carbon::now()->addSeconds($seconds);
+        $user->notify((new DocumentUploaded($documentUploadedData))->delay($time));
     }
 
     public function  sendNotificationApproved($id) 

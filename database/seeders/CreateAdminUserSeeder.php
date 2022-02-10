@@ -4,11 +4,8 @@
 
 namespace Database\Seeders;
 
-  
-
+use App\User;
 use Illuminate\Database\Seeder;
-
-use App\Models\User;
 
 use Spatie\Permission\Models\Role;
 
