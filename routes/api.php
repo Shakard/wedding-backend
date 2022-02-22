@@ -56,15 +56,18 @@ Route::middleware('auth:sanctum')->group(function () {
     
     //Tables Routes
     Route::get('tables', [TableController::class, 'getTables']);
+    Route::get('tables-users', [TableController::class, 'getTablesAndUsers']);
     Route::get('group-tables', [TableController::class, 'getGroupedTablesChairs']);
     Route::post('table/add', [TableController::class, 'storeTable']);
     Route::put('table/{table}', [TableController::class, 'updateTable']);
     Route::delete('table/{table}' , [TableController::class, 'destroy']);
     Route::post('store-table-by-number', [TableController::class, 'storeTableByNumber']);
+    Route::post('update-tables', [TableController::class, 'updateTables']);
 
     //Chair routes
     Route::post('chair/add', [ChairController::class, 'storeChair']);
     Route::get('chairs', [ChairController::class, 'getChairs']);
+    Route::get('unique-chairs', [ChairController::class, 'getChairsDropDown']);
     Route::put('chair/{chair}', [ChairController::class, 'updateChair']);
     Route::put('add-user/{chair}', [ChairController::class, 'addUser']);
     Route::get('chair-user', [ChairController::class, 'getChairsUsers']);    

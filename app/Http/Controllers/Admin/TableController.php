@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Chair;
 use App\Models\Table;
+use App\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,23 @@ class TableController extends Controller
     public function getTables()
     {
         $tables = Table::with('chairs.user')
+            ->orderBy('name')
+            ->select('*', 'name as label', 'name as value')
+            ->get();
+
+        return response()->json(
+            [
+                'data' => $tables,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+
+    public function getTablesAndUsers()
+    {
+        $tables = Table::with('users')
+            ->orderBy('name')
             ->select('*', 'name as label', 'name as value')
             ->get();
 
@@ -69,15 +87,15 @@ class TableController extends Controller
             $numberOfRecords = Table::All();
             for ($i = 0; $i < $request->input('number'); $i++) {
                 foreach ($numberOfRecords as $value) {
-                    if ($value->name == 'Mesa '.$f) {
-                        $f = $f+1;
-                    }else{
+                    if ($value->name == 'Mesa ' . $f) {
+                        $f = $f + 1;
+                    } else {
                         foreach ($numberOfRecords as $value) {
-                        	if ($value->name == 'Mesa '.$f) {
-                            	$f = $f+1;
+                            if ($value->name == 'Mesa ' . $f) {
+                                $f = $f + 1;
                             }
-                        }             
-                    }                     
+                        }
+                    }
                 }
                 $data = new Table();
                 $code = 'SOLVIT' . $f . 'S';
@@ -85,7 +103,7 @@ class TableController extends Controller
                 $data->code = $code;
                 $data->name = $name;
                 $data->save();
-                $f = $f+1;   
+                $f = $f + 1;
             }
         }
 
@@ -122,6 +140,25 @@ class TableController extends Controller
                 'detail' => 'La mesa fue eliminada exitósamente',
                 'code' => '201'
             ]
+        ], 201);
+    }
+
+    public function updateTables(Request $request)
+    {
+        $tables = $request->data; //pido toda la data del array y le asigno a la variable mesas               
+        foreach ($tables as $table) { //por cada mesa del array
+            $users = $table['users']; //selecciono a los invitados de la mesa en el array
+            $table = Table::find($table['id']); //busco el objeto "mesa" por el id de la mesa del array
+            foreach ($users as $user) { //por cada usuario
+                $user=User::find($user['id']); //busco al objeto "usuario" por el id del usuario en el array     
+                $user->table()->associate($table); //por medio de eloquent asigno el objeto "mesa" al objeto "usuario"
+                $user->update(); //actualizo el objeto          
+            }            
+        }    
+
+        return response()->json([
+            'summary' => 'success',
+            'code' => '201',
         ], 201);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Table extends Model
@@ -12,6 +13,11 @@ class Table extends Model
     public function chairs()
     {
         return $this->hasMany(Chair::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 
     public function items()

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Chair;
+use App\Models\Table;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'family_group_id', 'confirmation', 'phone', 'password', 'roles' 
+        'first_name', 'last_name', 'email', 'table_id', 'family_group_id', 'confirmation', 'phone', 'password', 'roles' 
     ];
 
     /**
@@ -33,6 +34,11 @@ class User extends Authenticatable
 
     public function chair() {
         return $this->hasOne(Chair::class);
+    }
+
+    public function table()
+    {
+        return $this->belongsTo(Table::class);
     }
 
     public function familyGroup()

@@ -13,10 +13,9 @@ class ChairController extends Controller
 
     public function getChairs()
     {
-
         $chairs = Chair::with('table')
-        ->select('*','name as label','name as value')        
-        ->get();
+            ->select('*', 'name as label', 'name as value')
+            ->get();
 
         return response()->json(
             [
@@ -27,8 +26,22 @@ class ChairController extends Controller
         );
     }
 
+    public function getChairsDropDown()
+    {
+        $chairs = Chair::with('table')
+            ->distinct()->get(['name as label', 'name as value']);
+            
+        return response()->json(
+            [
+                'data' => $chairs,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+
     public function getChairsByTable($id)
-    {   
+    {
         $table = Table::find($id);
         $chairs = Chair::where('table_id', $table->id)->get();
 
@@ -36,8 +49,7 @@ class ChairController extends Controller
             'summary' => 'success',
             'detail' => 'Le busqueda se realizo con exito',
             'code' => '200'
-        ]], 200);        
-        
+        ]], 200);
     }
 
     public function getChairsUsers()
@@ -107,13 +119,13 @@ class ChairController extends Controller
     public function storeChairByNumber(Request $request)
     {
 
-        for ($i = 1; $i <= $request->input('number'); $i++) {           
+        for ($i = 1; $i <= $request->input('number'); $i++) {
             $numberOfRecords = Chair::All();
             $table = Table::find($request->input('chair.table.id'));
             $chairsByTable = Chair::where('table_id', $table->id)->get();
             $data = new Chair();
-            $name = 'Silla ' . count($chairsByTable)+1;
-            $code = 'SOLVIT' . count($numberOfRecords)+1 . 'S';    
+            $name = 'Silla ' . count($chairsByTable) + 1;
+            $code = 'SOLVIT' . count($numberOfRecords) + 1 . 'S';
             $data->code = $code;
             $data->name = $name;
 
