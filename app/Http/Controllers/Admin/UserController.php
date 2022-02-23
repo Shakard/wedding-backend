@@ -301,7 +301,9 @@ class UserController extends Controller
 
     public function getGuests()
     {
-        $users = User::with('chair.table')->role('Guest')
+        $users = User::with('chair.table')
+            ->where('table_id', null)
+            ->role('Guest')
             ->get();
 
         return response()->json(
@@ -362,6 +364,20 @@ class UserController extends Controller
                 'detail' => 'El usuario fue eliminado exitósamente',
                 'code' => '201'
             ]
+        ], 201);
+    }
+
+    
+    public function clearUserTableId($id)
+    {
+        $user = User::findOrFail($id);
+        $user->table_id = null;
+        $user->save();
+
+        return response()->json([
+            'summary' => 'success',
+            'code' => '201',
+            'data' => $user
         ], 201);
     }
 

@@ -18,6 +18,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('download/{file}', [LibroController::class, 'downloadDocument']);
 
 
+
 Route::middleware('auth:sanctum')->group(function () {
 
     //Logout route
@@ -45,22 +46,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('users', [UserController::class, 'getUsers']);
     Route::get('guests', [UserController::class, 'getGuests']);
     Route::post('change-password', [ChangePasswordController::class, 'changePasswordApi']);
-    Route::get('logged-user', [UserController::class, 'loggedUser']);    
-    Route::put('user/{user}' , [UserController::class, 'update2']);
-    Route::any('user/{user}' , [UserController::class, 'destroy3']);
-    Route::any('send-users-mail' , [UserController::class, 'sendUsersMail']);
-    Route::post('delete-users' , [UserController::class, 'deleteSelectedUsers']);
+    Route::get('logged-user', [UserController::class, 'loggedUser']);
+    Route::put('user/{user}', [UserController::class, 'update2']);
+    Route::any('user/{user}', [UserController::class, 'destroy3']);
+    Route::any('clear-user-table-id/{id}', [UserController::class, 'clearUserTableId']);
+    Route::any('send-users-mail', [UserController::class, 'sendUsersMail']);
+    Route::post('delete-users', [UserController::class, 'deleteSelectedUsers']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);
     Route::post('add-user', [UserController::class, 'storeUser']);
-    
+
     //Tables Routes
     Route::get('tables', [TableController::class, 'getTables']);
     Route::get('tables-users', [TableController::class, 'getTablesAndUsers']);
     Route::get('group-tables', [TableController::class, 'getGroupedTablesChairs']);
     Route::post('table/add', [TableController::class, 'storeTable']);
     Route::put('table/{table}', [TableController::class, 'updateTable']);
-    Route::delete('table/{table}' , [TableController::class, 'destroy']);
+    Route::delete('table/{table}', [TableController::class, 'destroy']);
     Route::post('store-table-by-number', [TableController::class, 'storeTableByNumber']);
     Route::post('update-tables', [TableController::class, 'updateTables']);
 
@@ -70,9 +72,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('unique-chairs', [ChairController::class, 'getChairsDropDown']);
     Route::put('chair/{chair}', [ChairController::class, 'updateChair']);
     Route::put('add-user/{chair}', [ChairController::class, 'addUser']);
-    Route::get('chair-user', [ChairController::class, 'getChairsUsers']);    
-    Route::get('chairs-by-table/{table}', [ChairController::class, 'getChairsByTable']);    
-    Route::post('store-chair-by-number', [ChairController::class, 'storeChairByNumber']);    
+    Route::get('chair-user', [ChairController::class, 'getChairsUsers']);
+    Route::get('chairs-by-table/{table}', [ChairController::class, 'getChairsByTable']);
+    Route::post('store-chair-by-number', [ChairController::class, 'storeChairByNumber']);
 });
 
 
