@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('user/{user}', [UserController::class, 'update2']);
     Route::any('user/{user}', [UserController::class, 'destroy3']);
     Route::any('clear-user-table-id/{id}', [UserController::class, 'clearUserTableId']);
+    Route::any('clear-all-table-id', [UserController::class, 'clearAllUsersTableId']);
     Route::any('send-users-mail', [UserController::class, 'sendUsersMail']);
     Route::post('delete-users', [UserController::class, 'deleteSelectedUsers']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);

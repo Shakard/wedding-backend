@@ -367,7 +367,7 @@ class UserController extends Controller
         ], 201);
     }
 
-    
+
     public function clearUserTableId($id)
     {
         $user = User::findOrFail($id);
@@ -379,6 +379,26 @@ class UserController extends Controller
             'code' => '201',
             'data' => $user
         ], 201);
+    }
+
+    public function clearAllUsersTableId()
+    {
+
+        $users = User::role('Guest')
+            ->get();
+
+        foreach ($users as $user) {
+            $user->table_id = null;
+            $user->save();
+        }
+
+        return response()->json(
+            [
+                'data' => $users,
+                'message' => 'Success'
+            ],
+            200
+        );
     }
 
     public function deleteSelectedUsers(Request $request)
@@ -399,7 +419,7 @@ class UserController extends Controller
     }
 
     public function importUsers(Request $request)
-    {        
+    {
         $users = $request->data;
         User::insert($users);
         $usersWithoutRole = User::doesntHave('roles')->get();
@@ -416,8 +436,8 @@ class UserController extends Controller
 
     public function sendUsersMail()
     {
-        $notify = new DocumentUploadedController();     
-        $users = User::where('password', null)->get();   
+        $notify = new DocumentUploadedController();
+        $users = User::where('password', null)->get();
         // $users = User::where('updated_at', null)
         //     ->where('confirmation', 0)
         //     ->orderBy('id', 'desc')->get();
