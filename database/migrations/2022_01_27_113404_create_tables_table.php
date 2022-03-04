@@ -18,6 +18,8 @@ class CreateTablesTable extends Migration
             $table->id();
             $table->string('name');            
             $table->string('code')->default('0');
+            $table->integer('pos_x')->nullable();
+            $table->integer('pos_y')->nullable();
             $table->timestamps();
         });
     }

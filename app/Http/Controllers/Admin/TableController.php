@@ -161,4 +161,44 @@ class TableController extends Controller
             'code' => '201',
         ], 201);
     }
+
+    public function updatePosition(Request $request) 
+    {   
+        $request = $request->all();
+        $table = Table::find($request['id']);
+        $table->pos_x = ($request['pos_x']+$table->pos_x);
+        $table->pos_y = ($request['pos_y']+$table->pos_y);
+        $table->update();
+
+        return response()->json([
+            'data' => $table,
+            'msg' => [
+                'summary' => 'Actualización exitosa',
+                'detail' => 'La mesa fue actualizada exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
+
+    
+    public function resetPosition()
+    {
+
+        $tables = Table::All();
+
+        foreach ($tables as $table) {
+            $table->pos_x = null;
+            $table->pos_y = null;
+            $table->save();
+        }
+
+        return response()->json(
+            [
+                'data' => $tables,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+
 }

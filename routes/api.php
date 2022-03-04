@@ -66,6 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('table/{table}', [TableController::class, 'destroy']);
     Route::post('store-table-by-number', [TableController::class, 'storeTableByNumber']);
     Route::post('update-tables', [TableController::class, 'updateTables']);
+    Route::put('update-table-position', [TableController::class, 'updatePosition']);
+    Route::any('reset-tables-position', [TableController::class, 'resetPosition']);
 
     //Chair routes
     Route::post('chair/add', [ChairController::class, 'storeChair']);

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Table extends Model
 {
 
-    protected $fillable = ['name', 'code'];
+    protected $fillable = ['name', 'code', 'pos_x', 'pos_y'];
 
     public function chairs()
     {
