@@ -302,7 +302,7 @@ class UserController extends Controller
     public function getGuests()
     {
         $users = User::with('chair.table')
-            ->where('table_id', null)
+            ->where('canvas_element_id', null)
             ->role('Guest')
             ->get();
 
@@ -371,7 +371,7 @@ class UserController extends Controller
     public function clearUserTableId($id)
     {
         $user = User::findOrFail($id);
-        $user->table_id = null;
+        $user->canvas_element_id = null;
         $user->save();
 
         return response()->json([
@@ -459,6 +459,22 @@ class UserController extends Controller
             'msg' => [
                 'summary' => 'Notificaciones enviadas',
                 'detail' => 'Los invitados fueron notificados exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
+
+    public function countGuestsByTable(Request $request) 
+    {   
+        $request = $request->all();
+        $users = User::where('table_id', $request['id'])->get();
+        $users = count($users);
+
+        return response()->json([
+            'data' => $users,
+            'msg' => [
+                'summary' => 'Actualización exitosa',
+                'detail' => 'La mesa fue actualizada exitósamente',
                 'code' => '201'
             ]
         ], 201);

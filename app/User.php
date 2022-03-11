@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\CanvasElement;
 use App\Models\Chair;
 use App\Models\Table;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'table_id', 'family_group_id', 'confirmation', 'phone', 'password', 'roles' 
+        'first_name', 'last_name', 'email', 'canvas_element_id', 'table_id', 'family_group_id', 'confirmation', 'phone', 'password', 'roles' 
     ];
 
     /**
@@ -39,6 +40,11 @@ class User extends Authenticatable
     public function table()
     {
         return $this->belongsTo(Table::class);
+    }
+
+    public function canvasElement()
+    {
+        return $this->belongsTo(CanvasElement::class);
     }
 
     public function familyGroup()

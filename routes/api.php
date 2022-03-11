@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CanvasElementController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChairController;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('delete-users', [UserController::class, 'deleteSelectedUsers']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);
+    Route::get('users-table', [UserController::class, 'countGuestsByTable']);
     Route::post('add-user', [UserController::class, 'storeUser']);
 
     //Tables Routes
@@ -78,6 +80,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('chair-user', [ChairController::class, 'getChairsUsers']);
     Route::get('chairs-by-table/{table}', [ChairController::class, 'getChairsByTable']);
     Route::post('store-chair-by-number', [ChairController::class, 'storeChairByNumber']);
+
+    //CanvasElement Routes
+    Route::post('store-canvas-element', [CanvasElementController::class, 'storeCanvasElement']);
+    Route::get('tables-with-guests', [CanvasElementController::class, 'getDiningTablesWithGuests']);
+    Route::post('canvas-elements-by-type', [CanvasElementController::class, 'getCanvasElementsByType']);
+    Route::put('update-element-position', [CanvasElementController::class, 'updatePosition']);
+    Route::any('reset-element-position', [CanvasElementController::class, 'resetPosition']);
+    Route::get('all-elements', [CanvasElementController::class, 'getAllElements']);
+    Route::delete('canvas-element/{canvasElement}', [CanvasElementController::class, 'destroy']);
+    Route::post('update-canvas-element', [CanvasElementController::class, 'updateCanvasElements']);
+
+
 });
 
 

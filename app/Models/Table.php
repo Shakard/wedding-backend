@@ -18,13 +18,7 @@ class Table extends Model
     public function users()
     {
         return $this->hasMany(User::class);
-    }
-
-    public function items()
-    {
-        return $this->hasMany(Chair::class);
-    }
-    
+    }   
 }
 
 

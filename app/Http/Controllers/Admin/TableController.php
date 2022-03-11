@@ -32,10 +32,10 @@ class TableController extends Controller
     public function getTablesAndUsers()
     {
         $tables = Table::with('users')
-            ->orderBy('name')
-            ->select('*', 'name as label', 'name as value')
+            ->withCount('users')
+            ->orderByRaw("CAST(name as UNSIGNED) ASC")
             ->get();
-
+        
         return response()->json(
             [
                 'data' => $tables,
@@ -75,7 +75,8 @@ class TableController extends Controller
         if (count($numberOfRecords) == 0) {
             for ($i = 0; $i < $request->input('number'); $i++) {
                 $data = new Table();
-                $code = 'SOLVIT' . count($numberOfRecords) + 1 . 'S';
+                // $code = 'SOLVIT' . count($numberOfRecords) + 1 . 'S';
+                $code = count($numberOfRecords) + 1;
                 $name = 'Mesa ' . count($numberOfRecords) + 1;
                 $data->code = $code;
                 $data->name = $name;
