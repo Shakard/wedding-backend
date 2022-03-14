@@ -14,7 +14,7 @@ class CanvasElementController extends Controller
 
     public function getAllElements()
     {
-        $elements = CanvasElement::All();
+        $elements = CanvasElement::where('catalogue_id', '!=' , 18 )->get();
         
         return response()->json(
             [
@@ -69,6 +69,7 @@ class CanvasElementController extends Controller
         $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
         $data->code = $code;
         $data->name = $name;
+        $data->image = $request->input('canvas_element.image');
         $data->catalogue()->associate($catalogue);
         $data->save();
 
@@ -195,6 +196,22 @@ class CanvasElementController extends Controller
             'msg' => [
                 'summary' => 'Mesa eliminada',
                 'detail' => 'La mesa fue eliminada exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
+
+    public function destroyAll()
+    {
+        $elements = CanvasElement::All();
+        foreach ($elements as $element) {
+            $element->delete();
+        }
+
+        return response()->json([
+            'msg' => [
+                'summary' => 'Elementos eliminados',
+                'detail' => 'Los elementos fueron eliminados exitósamente',
                 'code' => '201'
             ]
         ], 201);

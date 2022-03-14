@@ -89,6 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::any('reset-element-position', [CanvasElementController::class, 'resetPosition']);
     Route::get('all-elements', [CanvasElementController::class, 'getAllElements']);
     Route::delete('canvas-element/{canvasElement}', [CanvasElementController::class, 'destroy']);
+    Route::delete('destroy-all-canvas-elements', [CanvasElementController::class, 'destroyAll']);
     Route::post('update-canvas-element', [CanvasElementController::class, 'updateCanvasElements']);
 
 
