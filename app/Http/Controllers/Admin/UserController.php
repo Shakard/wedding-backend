@@ -388,7 +388,7 @@ class UserController extends Controller
             ->get();
 
         foreach ($users as $user) {
-            $user->table_id = null;
+            $user->canvas_element_id = null;
             $user->save();
         }
 
