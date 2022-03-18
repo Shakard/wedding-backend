@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class CanvasElementController extends Controller
 {
-
+    //=============================Me trae todos los elementos de typo mesa=================================
     public function getAllElements()
     {
         $elements = CanvasElement::where('catalogue_id', '!=' , 18 )->get();
