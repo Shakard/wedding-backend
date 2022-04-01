@@ -14,8 +14,12 @@ class CanvasElementController extends Controller
     //=============================Me trae todos los elementos de typo mesa=================================
     public function getAllElements()
     {
-        $elements = CanvasElement::where('catalogue_id', '!=' , 18 )->get();
-        
+        $elements = CanvasElement::where('id', '>', 0)
+            ->with('users')
+            ->withCount('users')
+            ->orderByRaw("CAST(name as UNSIGNED) ASC")
+            ->get();
+
         return response()->json(
             [
                 'data' => $elements,
@@ -32,7 +36,7 @@ class CanvasElementController extends Controller
             ->withCount('users')
             ->orderByRaw("CAST(name as UNSIGNED) ASC")
             ->get();
-        
+
         return response()->json(
             [
                 'data' => $tables,
@@ -50,7 +54,7 @@ class CanvasElementController extends Controller
             ->withCount('users')
             ->orderByRaw("CAST(name as UNSIGNED) ASC")
             ->get();
-        
+
         return response()->json(
             [
                 'data' => $canvasElements,
@@ -65,11 +69,15 @@ class CanvasElementController extends Controller
         $numberOfRecords = CanvasElement::where('catalogue_id', $request->input('canvas_element.catalogue_id'))->get();
         $data = new CanvasElement();
         $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
-        $name = $request->input('canvas_element.name'). ' ' . count($numberOfRecords) + 1;
+        $name = $request->input('canvas_element.name') . ' ' . count($numberOfRecords) + 1;
         $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
         $data->code = $code;
         $data->name = $name;
         $data->image = $request->input('canvas_element.image');
+        $data->pos_x = 5;
+        $data->pos_y = 5;
+        $data->width = 80;
+        $data->height = 80;
         $data->catalogue()->associate($catalogue);
         $data->save();
 
@@ -132,7 +140,7 @@ class CanvasElementController extends Controller
         $request = $request->all();
         $element = CanvasElement::find($request['id']);
         $element->pos_x = ($request['pos_x'] + $element->pos_x);
-        $element->pos_y = ($request['pos_y'] + $element->pos_y);
+        $element->pos_y = ($request['pos_y'] + $element->pos_y);       
         $element->update();
 
         return response()->json([
@@ -144,7 +152,25 @@ class CanvasElementController extends Controller
             ]
         ], 201);
     }
+ 
 
+    public function updateSize(Request $request)
+    {
+        $request = $request->all();
+        $element = CanvasElement::find($request['id']);
+        $element->width = ($request['width']);
+        $element->height = ($request['height']);
+        $element->update();
+
+        return response()->json([
+            'data' => $element,
+            'msg' => [
+                'summary' => 'Actualización exitosa',
+                'detail' => 'Las dimensiones fueron actualizadas exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
 
     public function resetPosition()
     {
@@ -173,13 +199,14 @@ class CanvasElementController extends Controller
             $users = $table['users']; //selecciono a los invitados de la mesa en el array
             $table = CanvasElement::find($table['id']); //busco el objeto "mesa" por el id de la mesa del array
             foreach ($users as $user) { //por cada usuario
-                $user=User::find($user['id']); //busco al objeto "usuario" por el id del usuario en el array     
+                $user = User::find($user['id']); //busco al objeto "usuario" por el id del usuario en el array     
                 $user->canvasElement()->associate($table); //por medio de eloquent asigno el objeto "mesa" al objeto "usuario"
                 $user->update(); //actualizo el objeto          
-            }            
-        }    
+            }
+        }
 
         return response()->json([
+            'data' => $user,
             'summary' => 'success',
             'code' => '201',
         ], 201);

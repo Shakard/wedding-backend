@@ -21,6 +21,8 @@ class CreateCanvasElementsTable extends Migration
             $table->bigInteger('catalogue_id')->unsigned()->nullable();
             $table->integer('pos_x')->nullable();
             $table->integer('pos_y')->nullable();
+            $table->integer('width')->nullable();
+            $table->integer('heigth')->nullable();
             $table->timestamps();
 
             $table->foreign('catalogue_id')->references('id')->on('catalogues')->onDelete("set null");

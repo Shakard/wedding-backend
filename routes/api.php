@@ -17,7 +17,11 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 //Download Document route
 Route::get('download/{file}', [LibroController::class, 'downloadDocument']);
+//Update guest confirmation route
+Route::post('confirmation', [UserController::class, 'updateConfirmation']);
 
+//post de prueba
+Route::post('prueba', [UserController::class, 'updatePruba']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -86,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('tables-with-guests', [CanvasElementController::class, 'getDiningTablesWithGuests']);
     Route::post('canvas-elements-by-type', [CanvasElementController::class, 'getCanvasElementsByType']);
     Route::put('update-element-position', [CanvasElementController::class, 'updatePosition']);
+    Route::put('update-element-size', [CanvasElementController::class, 'updateSize']);
     Route::any('reset-element-position', [CanvasElementController::class, 'resetPosition']);
     Route::get('all-elements', [CanvasElementController::class, 'getAllElements']);
     Route::delete('canvas-element/{canvasElement}', [CanvasElementController::class, 'destroy']);

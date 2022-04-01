@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Hash as FacadesHash;
 use Illuminate\Support\Facades\Storage;
 
+use function GuzzleHttp\Promise\all;
+
 class UserController extends Controller
 {
     use Notifiable;
@@ -352,6 +354,42 @@ class UserController extends Controller
         ], 201);
     }
 
+    public function updatePruba(Request $request)
+    {        
+        if (!$request->hasFile('image') && !$request->file('image')->isValid()) {
+            return response()->json('{"error": "please provide an image"}');
+        }
+        try {
+            $imageName = $request->file('image')->hashName();
+            Storage::disk('local')->put($imageName, file_get_contents($request->file('image')));
+            return response()->json($imageName);
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
+    }
+
+    public function updateConfirmation(Request $request)
+    {
+        $detail = $request->input('detail');
+        $user = User::where('email', $detail)
+            ->orWhere('phone', $detail)
+            ->firstOrFail();
+
+            if (!$request->hasFile('image') && !$request->file('image')->isValid()) {
+                return response()->json('{"error": "please provide an image"}');
+            }
+            try {
+                $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
+                $request->file('image')->move('assets/files', $filename);
+                $user->file = $filename;
+                $user->confirmation = 1;
+                $user->update();
+                return response()->json($filename);                
+            } catch (\Exception $e) {
+                return response()->json($e);
+            }
+    }
+
     public function destroy3($id)
     {
         $user = User::find($id);
@@ -464,8 +502,10 @@ class UserController extends Controller
         ], 201);
     }
 
-    public function countGuestsByTable(Request $request) 
-    {   
+
+
+    public function countGuestsByTable(Request $request)
+    {
         $request = $request->all();
         $users = User::where('table_id', $request['id'])->get();
         $users = count($users);

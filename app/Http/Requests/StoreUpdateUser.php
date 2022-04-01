@@ -26,9 +26,10 @@ class StoreUpdateUser extends FormRequest
     {
 
         $rules = [
-            'name' => [''],
-            'email' => [''],
-            'password' => [''],
+            'user.name' => [''],
+            'user.email' => [''],
+            'user.password' => [''],
+            'user.file' => [''],
         ];
 
         return $rules;
@@ -40,7 +41,9 @@ class StoreUpdateUser extends FormRequest
 
             'user.name' => 'name',
             'user.email' => 'email',
-            'user.password' => 'password'
+            'user.password' => 'password',
+            'user.file' => 'file'
+
         ];
         return $attributes;
     }
