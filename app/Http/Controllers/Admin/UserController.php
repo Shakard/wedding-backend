@@ -488,7 +488,7 @@ class UserController extends Controller
             $userId = $user->id;
             $email = $user->email;
             $seconds = $seconds + 5;
-            //$notify->sendNotificationPassword($userId, $email, $password, $seconds);
+            $notify->sendNotificationPassword($userId, $email, $password, $seconds);
         }
 
         return response()->json([

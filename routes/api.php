@@ -96,8 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('canvas-element/{canvasElement}', [CanvasElementController::class, 'destroy']);
     Route::delete('destroy-all-canvas-elements', [CanvasElementController::class, 'destroyAll']);
     Route::post('update-canvas-element', [CanvasElementController::class, 'updateCanvasElements']);
-
-
+    Route::get('dd-tables', [CanvasElementController::class, 'getDinningTablesDropDown']);
 });
 
 

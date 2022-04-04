@@ -243,4 +243,18 @@ class CanvasElementController extends Controller
             ]
         ], 201);
     }
+
+    public function getDinningTablesDropDown()
+    {
+        $tables = CanvasElement::where('catalogue_id', 18)
+            ->distinct()->get(['name as label', 'name as value']);
+            
+        return response()->json(
+            [
+                'data' => $tables,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
 }

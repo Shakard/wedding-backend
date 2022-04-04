@@ -24,6 +24,10 @@ class User extends Authenticatable
         'first_name', 'last_name', 'email', 'canvas_element_id', 'table_id', 'family_group_id', 'confirmation', 'phone', 'password', 'roles' , 'file' 
     ];
 
+    protected $casts = [
+        'confirmation' => 'boolean',
+      ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

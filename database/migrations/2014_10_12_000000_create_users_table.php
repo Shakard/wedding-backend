@@ -18,8 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->unsignedBigInteger('family_group_id')->nullable();
-            $table->boolean('confirmation')->nullable();
-            $table->string('phone')->nullable();
+            $table->boolean('confirmation')->default('0');
             $table->string('email')->unique();
             $table->string('password')->nullable();
             $table->string('file')->nullable();
