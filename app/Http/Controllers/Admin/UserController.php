@@ -303,8 +303,7 @@ class UserController extends Controller
 
     public function getGuests()
     {
-        $users = User::with('chair.table')
-            ->where('canvas_element_id', null)
+        $users = User::with('canvasElement')
             ->role('Guest')
             ->get();
 
