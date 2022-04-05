@@ -335,7 +335,7 @@ class UserController extends Controller
         $user->createToken('weddingToken')->plainTextToken;
         $userId = $user->id;
         $email = $user->email;
-        $notify->sendNotificationPassword($userId, $email, $password, 4);
+        $notify->sendDocumentUploadedNotification($userId);
     }
 
 
@@ -474,7 +474,7 @@ class UserController extends Controller
     public function sendUsersMail()
     {
         $notify = new DocumentUploadedController();
-        $users = User::where('password', null)->get();
+        $users = User::where('confirmation', 0)->get();
         // $users = User::where('updated_at', null)
         //     ->where('confirmation', 0)
         //     ->orderBy('id', 'desc')->get();
@@ -493,6 +493,22 @@ class UserController extends Controller
 
         return response()->json([
             'data' => $users,
+            'msg' => [
+                'summary' => 'Notificaciones enviadas',
+                'detail' => 'Los invitados fueron notificados exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
+
+    public function notifyUser()
+    {
+        $notify = new DocumentUploadedController();
+        $user = User::find(2842);  
+        $notify->sendNotificationApproved($user->id);        
+
+        return response()->json([
+            'data' => $user,
             'msg' => [
                 'summary' => 'Notificaciones enviadas',
                 'detail' => 'Los invitados fueron notificados exitósamente',
