@@ -6,7 +6,7 @@
 @if ($level === 'error')
 # @lang('Whoops!')
 @else
-# @lang('Hello!')
+<!-- # @lang('Hello!') -->
 @endif
 @endif
 
@@ -43,21 +43,21 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-@lang('Regards'),<br>
+<!-- @lang('Saludos'),<br> -->
 <!-- {{ config('app.name') }} -->
-{<img src="{{asset('logos/only-logo.png')}}" alt="{{config('app.name')}}">
+<!-- <img src="{{asset('logos/only-logo.png')}}" alt="{{config('app.name')}}"> -->
 @endif
 
 {{-- Subcopy --}}
 @isset($actionText)
 @slot('subcopy')
-@lang(
-    "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser:',
+<!-- @lang(
+    "Si está teniendo problemas al dar click en el boton \":actionText\", copie y pegue el siguiente vínculo\n".
+    'en su navegador:',
     [
         'actionText' => $actionText,
     ]
-) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span> -->
 @endslot
 @endisset
 @endcomponent

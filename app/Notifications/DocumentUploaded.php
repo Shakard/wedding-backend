@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class DocumentUploaded extends Notification implements ShouldQueue
 {
@@ -42,11 +43,48 @@ class DocumentUploaded extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        // return (new MailMessage)
+        //             ->greeting($this->documentUploadedData['greeting'])
+        //             ->line($this->documentUploadedData['salutation'])
+        //             ->line($this->documentUploadedData['body'])
+        //             ->line($this->documentUploadedData['content'])
+        //             ->action($this->documentUploadedData['documentUploadedText'],
+        //              $this->documentUploadedData['url'])
+        //             ->line($this->documentUploadedData['content2'])
+        //             ->line($this->documentUploadedData['thankYou'])
+        //             ->line($this->documentUploadedData['thankYou2'])
+        //             ->line($this->documentUploadedData['thankYou3'])
+        //             ->line($this->documentUploadedData['thankYou4'])
+        //             ->line($this->documentUploadedData['help'])
+        //             ->salutation($this->documentUploadedData['regards'])                    
+        //             ->attach(public_path() . "/invitation.pdf");
+
+        $header = '<h1 style="text-align:center; font-size:34px; color: #BD945A"">Caro & Dani</h1>
+        <p style="text-align:center; font-size:20px; color: #808080">¡NOS VAMOS A CASAR!</p><br>';
+        $content2 = '<br><p style="text-align:center; font-size:14px; color: #808080">
+        Su usuario de registro es su dirección de correo electrónico o su número de celular (sin código de país), no olvide tener a la mano su certificado de vacunación (.pdf o .jpg) para adjuntarlo a su confirmación de asistencia, este es un requisito importante para cuidar de todos en nuestra boda.
+        </p>
+        <p style="text-align:center; font-size:14px; color: #808080">
+        Esperamos contar con su presencia,<br><br>
+        Con mucho cariño<br><br>
+        Caro & Dani<br><br>
+        PD: cualquier consulta contactar al +593996439571<br><br>      
+        </p>
+        ';
+
         return (new MailMessage)
-                    ->line($this->documentUploadedData['body'])
-                    ->action($this->documentUploadedData['documentUploadedText'],
-                     $this->documentUploadedData['url'])
-                    ->line($this->documentUploadedData['thankYou']);
+            ->line(new HtmlString($header))
+            ->line(new HtmlString('<p style="text-align:center; font-size:16px; color: #808080">' . $this->documentUploadedData['name'] . '</p><br>'))
+            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['salutation'] . '</p>'))
+            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['body'] . '</p>'))
+            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['content'] . '</p><br>'))
+            ->action(
+                $this->documentUploadedData['documentUploadedText'],
+                $this->documentUploadedData['url']
+            )
+            ->line(new HtmlString($content2))
+            ->line(new HtmlString('<p style="text-align:left; font-size:10px; color: #808080">' . $this->documentUploadedData['help'] . '</p><br>'))
+            ->attach(public_path() . "/invitation.pdf");
     }
 
     /**

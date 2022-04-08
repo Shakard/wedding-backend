@@ -480,15 +480,17 @@ class UserController extends Controller
         //     ->orderBy('id', 'desc')->get();
         $seconds = 0;
         foreach ($users as $user) {
-            $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
-            $password = substr($random, 0, 8);
-            $hashed_random_password = FacadesHash::make($password);
-            $user->password = $hashed_random_password;
-            $user->update();
+            // $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
+            // $password = substr($random, 0, 8);
+            // $hashed_random_password = FacadesHash::make($password);
+            // $user->password = $hashed_random_password;
+            // $user->update();
             $userId = $user->id;
-            $email = $user->email;
+            $name = $user->first_name;
+            $surname = $user->last_name;
+            $abbreviation = $user->abbreviation;
             $seconds = $seconds + 5;
-            $notify->sendNotificationPassword($userId, $email, $password, $seconds);
+            $notify->sendInvitation($userId, $name, $surname, $abbreviation, $seconds);
         }
 
         return response()->json([
