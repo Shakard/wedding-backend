@@ -43,22 +43,6 @@ class DocumentUploaded extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        // return (new MailMessage)
-        //             ->greeting($this->documentUploadedData['greeting'])
-        //             ->line($this->documentUploadedData['salutation'])
-        //             ->line($this->documentUploadedData['body'])
-        //             ->line($this->documentUploadedData['content'])
-        //             ->action($this->documentUploadedData['documentUploadedText'],
-        //              $this->documentUploadedData['url'])
-        //             ->line($this->documentUploadedData['content2'])
-        //             ->line($this->documentUploadedData['thankYou'])
-        //             ->line($this->documentUploadedData['thankYou2'])
-        //             ->line($this->documentUploadedData['thankYou3'])
-        //             ->line($this->documentUploadedData['thankYou4'])
-        //             ->line($this->documentUploadedData['help'])
-        //             ->salutation($this->documentUploadedData['regards'])                    
-        //             ->attach(public_path() . "/invitation.pdf");
-
         $header = '<h1 style="text-align:center; font-size:34px; color: #BD945A"">Caro & Dani</h1>
         <p style="text-align:center; font-size:20px; color: #808080">¡NOS VAMOS A CASAR!</p><br>';
         $content2 = '<br><p style="text-align:center; font-size:14px; color: #808080">

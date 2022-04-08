@@ -1,9 +1,9 @@
 <tr>
 <td class="header">
-<a href="{{ $url }}" style="display: inline-block;">
+<a href="https://wedding-solvit.com/#/" style="display: inline-block;">
 @if (trim($slot) === 'Laravel')
-<img src="https://uc0e1dde9b3cad04e7a957338b69.previews.dropboxusercontent.com/p/thumb/ABemdslBKPDYvcm3zmqxMf0yHQWY9DukSUNj82o354R08Y5cLRGITebFuA3F3GgAvY_7H1YaInCpuh_xFBMi2KK9u6kdMG2LM0h84U-V3d3ti488bFe1OqGDyTaAPijymYr-3Gb5CwqOUuuuZq0U-65RegQY1Mm-_AAk-y6seuaGmYY0h-JY_K2PM0rtwbU5DC0VebzAK9aMDyCqQRdpGOh-8Td3G50yvOvQsj0LSL0VLM173Th6hANkKtazGJBsA_2YEAdjZEJiGHccNkl6thjvkbd2pOGKCbKzwIYvKzMGrtzGqWhkFQC4EXJA4maIT4vxBB4wOx5zNM7huCUWuMyEAEsuLyUBAX3K89rCH0g_aJlacDGLZQ50MyVmJ8Lr-vU0MHNMvByKvJEpI4_lNvSwyZLXfjmJyLP9AY-H-eKPZg/p.jpeg"
- class="logo" alt="Laravel Logo" style="width:100px; height:auto">
+<img src="https://ucb1090f31717a01956d987ad789.previews.dropboxusercontent.com/p/thumb/ABfSbhx7skIESw7FBECwV0jRNIWkT_as1V3QwOnW4l-iJuq2f7U3tSiWLFTkbpspYN2DUYGRd4z3eV5lXJSyZ3ePaR0WKjv4k8qMcvvmRENfLcGW0b_VpdJkXIqgmqVR2L77GykJo-u_F9JhQW3yaqgFXkRaNG7xvPi4Ep9cJiWxS8A-2cjNINEgIG5NDIHV4QmLkwTzgpZG2uDOCg3qpBDXiu9o03LpDbHXzG-PRuf7qWtsJElWzMaHg9jRsdLCAoxfYtYyPJgYUKmtnJJWqVCG5y06j5W5ON6QAJID8ksr98xxLgmcua0TAk-khGEKMoM8LZJcFHO1QfAP9mHvQacndgIZ4kWRarig7SCx5kI1aFNPi_pVADNAdPmN-mH1PJN692TvyWRcYCESCTsxE-DvvMpOGs-by3XUX33urEhitQ/p.jpeg"
+ class="logo" alt="" style="width:100px; height:auto">
 @else
 {{ $slot }}
 @endif

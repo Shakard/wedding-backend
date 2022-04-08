@@ -42,13 +42,12 @@ class DocumentUploadedController extends Controller
         $user=User::find($id);
 
         $documentUploadedData = [
-            // 'greeting' => $abbreviation . ' ' . $name . ' ' . $surname ,
             'name' => $abbreviation . ' ' . $name . ' ' . $surname ,
             'salutation' => 'Tenemos el honor de invitarle a celebrar con nosotros la alegría de nuestro matrimonio que se realizará en la Iglesia Santiago Apóstol de San José de Puembo, seguida de la recepción en la Quinta La Mirá.',
             'body' => 'Con la bendición de Dios y de nuestros padres, uniremos nuestras vidas en matrimonio y le invitamos a participar de la ceremonia eclesiástica que se realizará en la Iglesia',
             'content' => 'Por favor ingresar en la siguiente página web para confirmar su asistencia y obtener todos los detalles de la boda:',
             'documentUploadedText' => 'Confirmar asistencia',
-            'url' => url('/'),
+            'url' => url('https://wedding-solvit.com/#/'),
             'help' => '** si usted recibe este correo o mensaje de texto por equivocación por favor responder al correo con el ASUNTO: EQUIVOCADO.',
         ];
 
