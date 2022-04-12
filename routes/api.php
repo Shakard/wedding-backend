@@ -9,10 +9,13 @@ use App\Http\Controllers\Admin\TableController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Auth\ChangePasswordController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProductController;
 
 //Register route
 Route::post('register', [AuthController::class, 'register']);
+//upload Files
+Route::post('upload', [FileController::class, 'storeFiles']);
 //Login route
 Route::post('login', [AuthController::class, 'login']);
 //Download Document route
