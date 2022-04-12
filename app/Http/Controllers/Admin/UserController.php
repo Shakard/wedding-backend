@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Hash as FacadesHash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 use function GuzzleHttp\Promise\all;
 
@@ -369,6 +370,10 @@ class UserController extends Controller
 
     public function updateConfirmation(Request $request)
     {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',    
+        ]);
+
         $detail = $request->input('detail');
         $user = User::where('email', $detail)
             ->orWhere('phone', $detail)
