@@ -45,10 +45,10 @@ class DocumentUploaded extends Notification implements ShouldQueue
     {
         $header = '<h1 style="text-align:center; font-size:34px; color: #BD945A"">Caro & Dani</h1>
         <p style="text-align:center; font-size:20px; color: #808080">¡NOS VAMOS A CASAR!</p><br>';
-        $content2 = '<br><p style="text-align:center; font-size:14px; color: #808080">
+        $content2 = '<br><p style="text-align:justify; font-size:14px; color: #808080">
         Su usuario de registro es su dirección de correo electrónico o su número de celular (sin código de país), no olvide tener a la mano su certificado de vacunación (.pdf o .jpg) para adjuntarlo a su confirmación de asistencia, este es un requisito importante para cuidar de todos en nuestra boda. 
         </p>
-        <p style="text-align:center; font-size:14px; color: #808080">
+        <p style="text-align:justify; font-size:14px; color: #808080">
         Esperamos contar con su presencia,<br><br>
         Con mucho cariño<br><br>
         Caro & Dani<br><br>
@@ -58,11 +58,11 @@ class DocumentUploaded extends Notification implements ShouldQueue
 
         return (new MailMessage)
             // ->line(new HtmlString($header))
-            ->line(new HtmlString('<p style="text-align:center; font-size:16px; color: #808080">' . $this->documentUploadedData['abbreviation'] . '</p><br>'))
-            ->line(new HtmlString('<p style="text-align:center; font-size:16px; color: #808080">' . $this->documentUploadedData['name'] . '</p><br>'))
-            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['salutation'] . '</p>'))
-            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['body'] . '</p>'))
-            ->line(new HtmlString('<p style="text-align:center; font-size:14px; color: #808080">' . $this->documentUploadedData['content'] . '</p><br>'))
+            ->line(new HtmlString('<p style="text-align:left; font-size:16px; color: #808080">' . $this->documentUploadedData['abbreviation'] . '</p>'))
+            ->line(new HtmlString('<p style="text-align:left; font-size:16px; color: #808080">' . $this->documentUploadedData['name'] . '</p><br>'))
+            ->line(new HtmlString('<p style="text-align:justify; font-size:14px; color: #808080">' . $this->documentUploadedData['salutation'] . '</p>'))
+            ->line(new HtmlString('<p style="text-align:justify; font-size:14px; color: #808080">' . $this->documentUploadedData['body'] . '</p>'))
+            ->line(new HtmlString('<p style="text-align:justify; font-size:14px; color: #808080">' . $this->documentUploadedData['content'] . '</p><br>'))
             ->action(
                 $this->documentUploadedData['documentUploadedText'],
                 $this->documentUploadedData['url']
