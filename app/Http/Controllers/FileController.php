@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class FileController extends Controller
@@ -26,7 +27,6 @@ class FileController extends Controller
     {
 
         return view('create');
-
     }
 
 
@@ -40,53 +40,37 @@ class FileController extends Controller
 
      */
 
+    public function getAllFiles() {
+        $images = File::All();
+
+        return response()->json(
+            [
+                'data' => $images,
+                'message' => 'Success'
+            ],
+            200
+        );
+    } 
+
     public function storeFiles(Request $request)
 
-    {
+    {       
+        foreach ($request->file() as $image) {
+            $imageName = Str::random(10) . time() . '.' . $image->getClientOriginalExtension();
+            $image->move('assets/images', $imageName);
+            $file = new File();
+            $file->filename = $imageName;
+            $url = url('/') . '/assets/images/' . $imageName;
+            $file->url = $url;
+            $file->save();
+        }
 
-
-        $this->validate($request, [
-
-                'filenames' => 'required',
-
-                'filenames.*' => 'mimes:doc,pdf,docx,zip'
-
-        ]);
-
-
-        if($request->hasfile('filenames'))
-
-         {
-
-            foreach($request->file('filenames') as $file)
-
-            {
-
-                $name = time().'.'.$file->extension();
-
-                $file->move(public_path().'/files/', $name);  
-
-                $data[] = $name;  
-
-            }
-
-         }
-
-
-         $file= new File();
-
-         $file->filenames=json_encode($data);
-
-         $file->save();
-
-
-         return response()->json(
+        return response()->json(
             [
-                'data' => $file,
+                'data' => $imageName,
                 'message' => 'Success'
             ],
             200
         );
     }
-
 }

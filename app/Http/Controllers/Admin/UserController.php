@@ -370,8 +370,17 @@ class UserController extends Controller
 
     public function updateConfirmation(Request $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',    
+        // $request->validate(
+        //     ['image' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048',]
+        // );
+
+        request()->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048'
+        ],
+        [
+            'image.required' => 'Ingrese su carnet de vacunación',
+            'image.mimes' => 'La imagen debe ser de tipo jpg, png o pdf',
+            'image.max' => 'El tamaño de la imagen hasta 2mb'
         ]);
 
         $detail = $request->input('detail');

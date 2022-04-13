@@ -14,8 +14,9 @@ use App\Http\Controllers\ProductController;
 
 //Register route
 Route::post('register', [AuthController::class, 'register']);
-//upload Files
-Route::post('upload', [FileController::class, 'storeFiles']);
+//Files routes
+Route::get('images', [FileController::class, 'getAllFiles']);
+Route::post('upload-images', [FileController::class, 'storeFiles']);
 //Login route
 Route::post('login', [AuthController::class, 'login']);
 //Download Document route
