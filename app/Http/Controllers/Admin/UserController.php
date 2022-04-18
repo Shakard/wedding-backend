@@ -375,10 +375,9 @@ class UserController extends Controller
         // );
 
         request()->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048'
+            'image' => 'mimes:jpg,png,jpeg,pdf|max:2048'
         ],
         [
-            'image.required' => 'Ingrese su carnet de vacunación',
             'image.mimes' => 'La imagen debe ser de tipo jpg, png o pdf',
             'image.max' => 'El tamaño de la imagen hasta 2mb'
         ]);
