@@ -342,7 +342,8 @@ class UserController extends Controller
 
     public function update2(Request $request, User $user)
     {
-        $user->name = $request->input('user.name');
+        $user->first_name = $request->input('user.first_name');
+        $user->last_name = $request->input('user.last_name');
         $user->email = $request->input('user.email');
         $user->save();
         $user->assignRole($request->input('roles'));

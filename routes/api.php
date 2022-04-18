@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('change-password', [ChangePasswordController::class, 'changePasswordApi']);
     Route::get('logged-user', [UserController::class, 'loggedUser']);
     Route::put('user/{user}', [UserController::class, 'update2']);
-    Route::any('user/{user}', [UserController::class, 'destroy3']);
+    Route::delete('user/{user}', [UserController::class, 'destroy3']);
     Route::any('clear-user-table-id/{id}', [UserController::class, 'clearUserTableId']);
     Route::any('clear-all-table-id', [UserController::class, 'clearAllUsersTableId']);
     Route::any('send-users-mail', [UserController::class, 'sendUsersMail']);
