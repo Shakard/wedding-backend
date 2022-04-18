@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\DocumentUploaded;
-use App\Notifications\InvitationNotification;
+use App\Notifications\WeddingInvitation;
 use App\User;
 use Carbon\Carbon;
 
@@ -55,7 +55,7 @@ class DocumentUploadedController extends Controller
         ];
 
         $time = Carbon::now()->addSeconds($seconds);
-        $user->notify((new InvitationNotification($documentUploadedData))->delay($time));
+        $user->notify((new WeddingInvitation($documentUploadedData))->delay($time));
     }
 
 

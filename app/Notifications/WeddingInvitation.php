@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 
-class InvitationNotification extends Notification implements ShouldQueue
+class WeddingInvitation extends Notification implements ShouldQueue
 {
     use Queueable;
     private $documentUploadedData;
