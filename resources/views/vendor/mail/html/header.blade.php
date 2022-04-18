@@ -1,12 +1,12 @@
 <tr>
 <td class="header">
 <a href="https://wedding-solvit.com/#/" style="display: inline-block;">
-<!-- @if (trim($slot) === "Boda Caro y Dani") -->
+@if (trim($slot) === 'Boda Caro y Dani')
 <img src="https://backend.wedding-solvit.com/assets/images/beTnzLh7691650305100.jpg"
  class="logo" alt="" style="width:100px; height:auto">
-<!-- @else
+@else
 {{ $slot }}
-@endif -->
+@endif
 </a>
 </td>
 </tr>
