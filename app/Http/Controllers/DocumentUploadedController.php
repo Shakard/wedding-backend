@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\DocumentUploaded;
+use App\Notifications\InvitationNotification;
 use App\User;
 use Carbon\Carbon;
 
@@ -19,7 +19,7 @@ class DocumentUploadedController extends Controller
             'thankYou' => 'Aprobar o rechazar el documento'
         ];
 
-        $user->notify(new DocumentUploaded($documentUploadedData));
+        $user->notify(new InvitationNotification($documentUploadedData));
     }
 
     public function  sendNotificationPassword($id, $email, $password, $seconds) 
@@ -34,7 +34,7 @@ class DocumentUploadedController extends Controller
         ];
 
         $time = Carbon::now()->addSeconds($seconds);
-        $user->notify((new DocumentUploaded($documentUploadedData))->delay($time));
+        $user->notify((new InvitationNotification($documentUploadedData))->delay($time));
     }
 
     
@@ -54,7 +54,7 @@ class DocumentUploadedController extends Controller
         ];
 
         $time = Carbon::now()->addSeconds($seconds);
-        $user->notify((new DocumentUploaded($documentUploadedData))->delay($time));
+        $user->notify((new InvitationNotification($documentUploadedData))->delay($time));
     }
 
 
@@ -69,7 +69,7 @@ class DocumentUploadedController extends Controller
             'thankYou' => 'Gracias por su atención'
         ];
 
-        $user->notify(new DocumentUploaded($documentUploadedData));
+        $user->notify(new InvitationNotification($documentUploadedData));
     }
     
     public function  sendNotificationDenied($id) 
@@ -83,7 +83,7 @@ class DocumentUploadedController extends Controller
             'thankYou' => 'Gracias por su atención'
         ];
 
-        $user->notify(new DocumentUploaded($documentUploadedData));
+        $user->notify(new InvitationNotification($documentUploadedData));
     }
     
 }
