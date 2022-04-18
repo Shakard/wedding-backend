@@ -487,8 +487,8 @@ class UserController extends Controller
     public function sendUsersMail()
     {
         $notify = new DocumentUploadedController();
-        $users = User::where('confirmation', 0)->get();
-        // $users = User::where('phone', '0999869607')->get();
+        // $users = User::where('confirmation', 0)->get();
+        $users = User::where('phone', '0999869607')->get();
         // $users = User::where('updated_at', null)
         //     ->where('confirmation', 0)
         //     ->orderBy('id', 'desc')->get();
