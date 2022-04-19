@@ -14,18 +14,19 @@ use App\Http\Controllers\ProductController;
 
 //Register route
 Route::post('register', [AuthController::class, 'register']);
-//Files routes
-Route::get('images', [FileController::class, 'getAllFiles']);
-Route::post('upload-images', [FileController::class, 'storeFiles']);
+
 //Login route
 Route::post('login', [AuthController::class, 'login']);
-//Download Document route
-Route::get('download/{file}', [LibroController::class, 'downloadDocument']);
+
+//Web Page routes
 //Update guest confirmation route
 Route::post('confirmation', [UserController::class, 'updateConfirmation']);
 
 //post de prueba
 Route::post('prueba', [UserController::class, 'updatePruba']);
+
+//download file from gallery
+Route::get('download-catalogue', [FileController::class, 'downloadFile']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -35,6 +36,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Categories routes
     Route::get('categories', [CategoryController::class, 'getCategories']);
+
+    //Files routes
+    Route::get('images', [FileController::class, 'getAllFiles']);
+    Route::post('upload-images', [FileController::class, 'storeFiles']);
 
     //Products routes
     Route::post('product/add', [ProductController::class, 'storeProduct']);

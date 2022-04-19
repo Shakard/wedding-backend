@@ -52,6 +52,14 @@ class FileController extends Controller
         );
     } 
 
+    public function downloadFile() {
+        $filePath = public_path('CATALOGO 2022 TOCADOS VEU.pdf');
+    	$headers = ['Content-Type: application/pdf'];
+    	$fileName = time().'.pdf';
+
+    	return response()->download($filePath, $fileName, $headers);
+    } 
+
     public function storeFiles(Request $request)
 
     {       
