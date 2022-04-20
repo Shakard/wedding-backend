@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File as FileFacade;
 
 
 class FileController extends Controller
@@ -80,5 +81,22 @@ class FileController extends Controller
             ],
             200
         );
+    }
+
+    public function deleteFile($id) {
+        $file = File::find($id);
+        $filename = $file->filename;
+        $path = public_path('/assets/images/'.$filename);
+        $file->delete();
+        FileFacade::delete($path);
+
+        return response()->json([
+            'data' =>$path,
+            'msg' => [
+                'summary' => 'Imagen eliminada',
+                'detail' => 'La imagen fué eliminada exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
     }
 }

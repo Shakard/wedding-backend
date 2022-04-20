@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Files routes
     Route::get('images', [FileController::class, 'getAllFiles']);
     Route::post('upload-images', [FileController::class, 'storeFiles']);
+    Route::delete('file/{file}', [FileController::class, 'deleteFile']);
 
     //Products routes
     Route::post('product/add', [ProductController::class, 'storeProduct']);

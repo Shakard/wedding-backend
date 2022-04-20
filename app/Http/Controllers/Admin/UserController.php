@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DocumentUploadedController;
 use Spatie\Permission\Models\Role;
 use App\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB as FacadesDB;
@@ -262,7 +263,8 @@ class UserController extends Controller
     public function loggedUser()
     {
         $user = auth()->user();
-
+        $user->roles;
+        
         return response()->json([
             'data' => $user,
             'message' => 'success'
