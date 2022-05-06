@@ -35,7 +35,8 @@ class AuthController extends Controller
         // $user->email = $request->input('user.email');
         // $user->password = Hash::make($request->input('user.password'));
         $user->save();
-        $user->assignRole($request->input('user.roles'));      
+        $user->assignRole($request->input('roles'));  
+        // $user->assignRole($request->input('user.roles'));      
         //$roles = $user->getRoleNames();
         $token = $user->createToken('weddingToken')->plainTextToken;
         $response = [

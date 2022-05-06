@@ -73,6 +73,7 @@ class CanvasElementController extends Controller
         $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
         $data->code = $code;
         $data->name = $name;
+        $data->chairs = $request->input('canvas_element.chairs');
         $data->image = $request->input('canvas_element.image');
         $data->pos_x = 5;
         $data->pos_y = 5;
@@ -85,6 +86,33 @@ class CanvasElementController extends Controller
             'summary' => 'success',
             'code' => '201',
             'data' => $catalogue,
+        ], 201);
+    }
+
+    public function storeRoundTableByNumber(Request $request)
+    {
+
+        for ($i = 1; $i <= $request->input('number'); $i++) {
+            $numberOfRecords = CanvasElement::where('catalogue_id', $request->input('canvas_element.catalogue_id'))->get();
+            $data = new CanvasElement();
+            $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
+            $name = $request->input('canvas_element.name') . ' ' . count($numberOfRecords) + 1;
+            $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
+            $data->code = $code;
+            $data->name = $name;
+            $data->chairs = $request->input('canvas_element.chairs');
+            $data->image = $request->input('canvas_element.image');
+            $data->pos_x = 50;
+            $data->pos_y = 70;
+            $data->width = 80;
+            $data->height = 80;
+            $data->catalogue()->associate($catalogue);
+            $data->save();
+        }
+
+        return response()->json([
+            'summary' => 'success',
+            'code' => '201',
         ], 201);
     }
 

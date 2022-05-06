@@ -19,6 +19,7 @@ class CreateCanvasElementsTable extends Migration
             $table->string('name');            
             $table->string('code')->default('0');
             $table->bigInteger('catalogue_id')->unsigned()->nullable();
+            $table->json('properties')->nullable();
             $table->integer('pos_x')->nullable();
             $table->integer('pos_y')->nullable();
             $table->integer('width')->nullable();

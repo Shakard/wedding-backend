@@ -21,6 +21,8 @@ Route::post('login', [AuthController::class, 'login']);
 //Web Page routes
 //Update guest confirmation route
 Route::post('confirmation', [UserController::class, 'updateConfirmation']);
+Route::get('images', [FileController::class, 'getAllFiles']);
+
 
 //post de prueba
 Route::post('prueba', [UserController::class, 'updatePruba']);
@@ -38,7 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('categories', [CategoryController::class, 'getCategories']);
 
     //Files routes
-    Route::get('images', [FileController::class, 'getAllFiles']);
     Route::post('upload-images', [FileController::class, 'storeFiles']);
     Route::delete('file/{file}', [FileController::class, 'deleteFile']);
 
@@ -59,7 +60,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Users routes
     Route::get('users', [UserController::class, 'getUsers']);
-    Route::get('guests', [UserController::class, 'getGuests']);
+    Route::any('guests', [UserController::class, 'getGuests']);
+    Route::any('guests-and-table', [UserController::class, 'getGuestsWithTable']);
+    Route::post('search-guests-by-filters', [UserController::class, 'searchGuestByParameters']);
+    Route::any('search-guests/{filters}', [UserController::class, 'searchGuestsNames']);
     Route::post('change-password', [ChangePasswordController::class, 'changePasswordApi']);
     Route::get('logged-user', [UserController::class, 'loggedUser']);
     Route::put('user/{user}', [UserController::class, 'update2']);
@@ -97,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //CanvasElement Routes
     Route::post('store-canvas-element', [CanvasElementController::class, 'storeCanvasElement']);
+    Route::post('store-round-table-by-number', [CanvasElementController::class, 'storeRoundTableByNumber']);
     Route::get('tables-with-guests', [CanvasElementController::class, 'getDiningTablesWithGuests']);
     Route::post('canvas-elements-by-type', [CanvasElementController::class, 'getCanvasElementsByType']);
     Route::put('update-element-position', [CanvasElementController::class, 'updatePosition']);

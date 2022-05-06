@@ -64,7 +64,8 @@ class FileController extends Controller
     public function storeFiles(Request $request)
 
     {       
-        foreach ($request->file() as $image) {
+        // $data = $request->file('images');
+        foreach ($request->file('images') as $image) {
             $imageName = Str::random(10) . time() . '.' . $image->getClientOriginalExtension();
             $image->move('assets/images', $imageName);
             $file = new File();
@@ -76,7 +77,7 @@ class FileController extends Controller
 
         return response()->json(
             [
-                'data' => $imageName,
+                // 'data' => $data,
                 'message' => 'Success'
             ],
             200

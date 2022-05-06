@@ -264,7 +264,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $user->roles;
-        
+
         return response()->json([
             'data' => $user,
             'message' => 'success'
@@ -307,8 +307,75 @@ class UserController extends Controller
     public function getGuests()
     {
         $users = User::with('canvasElement')
+            ->whereNull('canvas_element_id')
             ->role('Guest')
             ->get();
+
+        return response()->json(
+            [
+                'data' => $users,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+    
+    public function getGuestsWithTable()
+    {
+        $users = User::with('canvasElement')
+            ->role('Guest')
+            ->get();
+
+        return response()->json(
+            [
+                'data' => $users,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+
+    public function searchGuestByParameters(Request $request)
+    {
+        $confirmed = $request->boolean('confirmation');
+        $guests = User::with('canvasElement')->whereNull('canvas_element_id')
+            // ->where('confirmation', $request->input('confirmation'))
+            ->role('Guest')
+            ->when($request->first_name, function ($query) use ($request) {
+                $query->where('first_name', 'LIKE', "%{$request->first_name}%");
+            })
+            ->when($request->last_name, function ($query) use ($request) {
+                $query->where('last_name', 'LIKE', "%{$request->last_name}%");
+            })
+            ->when($request->cualquier, function ($query) use ($request) {
+                $query->where('family_group', 'LIKE', "%{$request->cualquier}%");
+            })
+            ->when((bool)$request->confirmation, function ($query) use ($confirmed) {
+                    $query->where('confirmation', 'LIKE', "%{$confirmed}%");
+            })
+            ->get();
+
+        return response()->json(
+            [
+                'data' => $guests,
+                'message' => 'Success'
+            ],
+            200
+        );
+    }
+
+
+
+    public function searchGuestsNames($filters)
+    {
+        $users = User::with('canvasElement')
+            ->role('Guest')
+            ->where(function ($query) use ($filters) {
+                if ($filters) {
+                    $query->orWhere('first_name', 'LIKE', "%{$filters}%");
+                    $query->orWhere('last_name',  'LIKE', "%{$filters}%");
+                }
+            })->get();
 
         return response()->json(
             [
@@ -346,6 +413,8 @@ class UserController extends Controller
     {
         $user->first_name = $request->input('user.first_name');
         $user->last_name = $request->input('user.last_name');
+        $user->confirmation = $request->input('user.confirmation');
+        $user->comment = $request->input('user.comment');
         $user->email = $request->input('user.email');
         $user->save();
         $user->assignRole($request->input('roles'));
@@ -358,7 +427,7 @@ class UserController extends Controller
     }
 
     public function updatePruba(Request $request)
-    {        
+    {
         if (!$request->hasFile('image') && !$request->file('image')->isValid()) {
             return response()->json('{"error": "please provide an image"}');
         }
@@ -377,32 +446,34 @@ class UserController extends Controller
         //     ['image' => 'required|image|mimes:jpg,png,jpeg,pdf|max:2048',]
         // );
 
-        request()->validate([
-            'image' => 'mimes:jpg,png,jpeg,pdf|max:2048'
-        ],
-        [
-            'image.mimes' => 'La imagen debe ser de tipo jpg, png o pdf',
-            'image.max' => 'El tamaño de la imagen hasta 2mb'
-        ]);
+        request()->validate(
+            [
+                'image' => 'mimes:jpg,png,jpeg,pdf|max:2048'
+            ],
+            [
+                'image.mimes' => 'La imagen debe ser de tipo jpg, png o pdf',
+                'image.max' => 'El tamaño de la imagen hasta 2mb'
+            ]
+        );
 
         $detail = $request->input('detail');
         $user = User::where('email', $detail)
             ->orWhere('phone', $detail)
             ->firstOrFail();
 
-            if (!$request->hasFile('image') && !$request->file('image')->isValid()) {
-                return response()->json('{"error": "please provide an image"}');
-            }
-            try {
-                $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
-                $request->file('image')->move('assets/files', $filename);
-                $user->file = $filename;
-                $user->confirmation = 1;
-                $user->update();
-                return response()->json($filename);                
-            } catch (\Exception $e) {
-                return response()->json($e);
-            }
+        if (!$request->hasFile('image') && !$request->file('image')->isValid()) {
+            return response()->json('{"error": "please provide an image"}');
+        }
+        try {
+            $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move('assets/files', $filename);
+            $user->file = $filename;
+            $user->confirmation = 1;
+            $user->update();
+            return response()->json($filename);
+        } catch (\Exception $e) {
+            return response()->json($e);
+        }
     }
 
     public function destroy3($id)
@@ -523,8 +594,8 @@ class UserController extends Controller
     public function notifyUser()
     {
         $notify = new DocumentUploadedController();
-        $user = User::find(2842);  
-        $notify->sendNotificationApproved($user->id);        
+        $user = User::find(2842);
+        $notify->sendNotificationApproved($user->id);
 
         return response()->json([
             'data' => $user,

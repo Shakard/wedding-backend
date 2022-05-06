@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class CanvasElement extends Model
 {
 
+    protected $casts = [
+        'chairs' => 'array'
+    ];
+
     protected $fillable = ['name', 'code', 'catalogue_id', 'pos_x', 'pos_y'];    
 
     public function catalogue()
@@ -19,4 +23,5 @@ class CanvasElement extends Model
     {
         return $this->hasMany(User::class);
     }   
+    
 }
