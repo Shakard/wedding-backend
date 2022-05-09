@@ -389,7 +389,7 @@ class UserController extends Controller
     public function storeUser(Request $request)
 
     {
-        $notify = new DocumentUploadedController();
+        // $notify = new DocumentUploadedController();
         $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ234567890!$%^&!$%^&');
         $password = substr($random, 0, 8);
         $hashed_random_password = FacadesHash::make($password);
@@ -403,9 +403,9 @@ class UserController extends Controller
         $user->save();
         $user->assignRole('Guest');
         $user->createToken('weddingToken')->plainTextToken;
-        $userId = $user->id;
-        $email = $user->email;
-        $notify->sendDocumentUploadedNotification($userId);
+        // $userId = $user->id;
+        // $email = $user->email;
+        // $notify->sendDocumentUploadedNotification($userId);
     }
 
 
@@ -414,6 +414,7 @@ class UserController extends Controller
         $user->first_name = $request->input('user.first_name');
         $user->last_name = $request->input('user.last_name');
         $user->confirmation = $request->input('user.confirmation');
+        $user->phone = $request->input('user.phone');
         $user->comment = $request->input('user.comment');
         $user->email = $request->input('user.email');
         $user->save();
