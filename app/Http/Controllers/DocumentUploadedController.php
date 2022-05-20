@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\DocumentUploaded;
+use App\Notifications\QrNotification;
 use App\Notifications\WeddingInvitation;
 use App\User;
 use Carbon\Carbon;
@@ -56,6 +57,27 @@ class DocumentUploadedController extends Controller
 
         $time = Carbon::now()->addSeconds($seconds);
         $user->notify((new WeddingInvitation($documentUploadedData))->delay($time));
+    }
+
+    public function sendQr($id, $name, $surname, $abbreviation, $seconds, $url) 
+    {   
+        $user=User::find($id);
+
+        $documentUploadedData = [
+            'laravel' => 'Hola',
+            'qr' => $url,
+            'abbreviation' => $abbreviation,
+            'name' => $name . ' ' . $surname ,
+            'salutation' => 'Es un honor compartir con usted la alegría de nuestro matrimonio que con la bendición de Dios y de nuestros padres, se celebrará en la Iglesia Santiago Apóstol de San José de Puembo, seguida de la recepción en la Quinta La Mirá. ',
+            'body' => 'Adjunto en este correo encontrará la invitación con toda la información para acompañarnos en este día tan especial para nosotros. ',
+            'content' => 'Por favor para confirmar su asistencia sírvase ingresar en la siguiente página web:',
+            'documentUploadedText' => 'Confirmar asistencia',
+            'url' => url('https://wedding-solvit.com/#/'),
+            'help' => '** si usted recibe este correo o mensaje de texto por equivocación por favor responder al correo con el ASUNTO: EQUIVOCADO.',
+        ];
+
+        $time = Carbon::now()->addSeconds($seconds);
+        $user->notify((new QrNotification($documentUploadedData))->delay($time));
     }
 
 

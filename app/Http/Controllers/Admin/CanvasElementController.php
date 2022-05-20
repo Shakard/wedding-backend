@@ -8,6 +8,9 @@ use App\Models\Catalogue;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\File as FileFacade;
+
 
 class CanvasElementController extends Controller
 {
@@ -68,7 +71,8 @@ class CanvasElementController extends Controller
     {
         $numberOfRecords = CanvasElement::where('catalogue_id', $request->input('canvas_element.catalogue_id'))->get();
         $data = new CanvasElement();
-        $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
+        // $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
+        $code = count($numberOfRecords) + 1;
         $name = $request->input('canvas_element.name') . ' ' . count($numberOfRecords) + 1;
         $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
         $data->code = $code;
@@ -95,7 +99,8 @@ class CanvasElementController extends Controller
         for ($i = 1; $i <= $request->input('number'); $i++) {
             $numberOfRecords = CanvasElement::where('catalogue_id', $request->input('canvas_element.catalogue_id'))->get();
             $data = new CanvasElement();
-            $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
+            // $code = 'SOLVIT' . count($numberOfRecords) + 1 . $request->input('canvas_element.code');
+            $code = count($numberOfRecords) + 1;
             $name = $request->input('canvas_element.name') . ' ' . count($numberOfRecords) + 1;
             $catalogue = Catalogue::find($request->input('canvas_element.catalogue_id'));
             $data->code = $code;
@@ -222,14 +227,29 @@ class CanvasElementController extends Controller
 
     public function updateCanvasElements(Request $request)
     {
-        $tables = $request->data; //pido toda la data del array y le asigno a la variable mesas               
+        $tables = $request->data; //pido todos los elementos del array y le asigno a la variable mesas               
         foreach ($tables as $table) { //por cada mesa del array
             $users = $table['users']; //selecciono a los invitados de la mesa en el array
             $table = CanvasElement::find($table['id']); //busco el objeto "mesa" por el id de la mesa del array
             foreach ($users as $user) { //por cada usuario
-                $user = User::find($user['id']); //busco al objeto "usuario" por el id del usuario en el array     
+                $user = User::find($user['id']); //busco al objeto "usuario" por el id del usuario en el array                
                 $user->canvasElement()->associate($table); //por medio de eloquent asigno el objeto "mesa" al objeto "usuario"
-                $user->update(); //actualizo el objeto          
+                //Borro el ultimo qqr
+                // if ($user->qqrname) {
+                //     $oldQrr = $user->qqrname;
+                //     $path = public_path('assets/qrcodes/'.$oldQrr);
+                //     FileFacade::delete($path);
+                // }                
+                //creo un nuevo qqr
+                // $imageName = 'qqr-'. time() . '.' . '.svg';
+                // $user->qqrname = $imageName;
+                // QrCode::size(250)->errorCorrection('H')
+                // // ->color(2, 204, 198)
+                // ->generate($user->first_name.' '.$user->last_name.' '.$table->name, public_path('assets/qrcodes/'.$imageName));
+                // $url = url('/') . '/assets/qrcodes/' . $imageName;
+                // $user->qqr = $url;
+                // //actualizo al usuario
+                $user->update(); //actualizo el objeto                       
             }
         }
 
@@ -274,7 +294,7 @@ class CanvasElementController extends Controller
 
     public function getDinningTablesDropDown()
     {
-        $tables = CanvasElement::where('catalogue_id', 18)
+        $tables = CanvasElement::where('catalogue_id', 18)->orWhere('catalogue_id', 34)
             ->distinct()->get(['name as label', 'name as value']);
             
         return response()->json(

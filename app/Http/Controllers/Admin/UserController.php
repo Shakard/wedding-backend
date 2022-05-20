@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Hash as FacadesHash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\File as FileFacade;
+
+
 
 use function GuzzleHttp\Promise\all;
 
@@ -319,7 +323,7 @@ class UserController extends Controller
             200
         );
     }
-    
+
     public function getGuestsWithTable()
     {
         $users = User::with('canvasElement')
@@ -351,7 +355,7 @@ class UserController extends Controller
                 $query->where('family_group', 'LIKE', "%{$request->cualquier}%");
             })
             ->when((bool)$request->confirmation, function ($query) use ($confirmed) {
-                    $query->where('confirmation', 'LIKE', "%{$confirmed}%");
+                $query->where('confirmation', 'LIKE', "%{$confirmed}%");
             })
             ->get();
 
@@ -403,6 +407,7 @@ class UserController extends Controller
         $user->save();
         $user->assignRole('Guest');
         $user->createToken('weddingToken')->plainTextToken;
+        QrCode::generate($request->input('user.first_name'), public_path('assets/qrcodes/img-' . time() . '.svg'));
         // $userId = $user->id;
         // $email = $user->email;
         // $notify->sendDocumentUploadedNotification($userId);
@@ -470,6 +475,15 @@ class UserController extends Controller
             $request->file('image')->move('assets/files', $filename);
             $user->file = $filename;
             $user->confirmation = 1;
+            //creo un nuevo qqr
+            $imageName = 'qqr-' . time() . '.' . '.svg';
+            $user->qqrname = $imageName;
+            QrCode::size(250)->errorCorrection('H')
+                // ->color(2, 204, 198)
+                ->generate($user->first_name . ' ' . $user->last_name . ' ' . $user->canvas_element_id, public_path('assets/qrcodes/' . $imageName));
+            $url = url('/') . '/assets/qrcodes/' . $imageName;
+            $user->qqr = $url;
+            //actualizo al usuario
             $user->update();
             return response()->json($filename);
         } catch (\Exception $e) {
@@ -584,6 +598,49 @@ class UserController extends Controller
 
         return response()->json([
             'data' => $users,
+            'msg' => [
+                'summary' => 'Notificaciones enviadas',
+                'detail' => 'Los invitados fueron notificados exitósamente',
+                'code' => '201'
+            ]
+        ], 201);
+    }
+
+    public function sendUsersQr()
+    {
+        //Borro los ultimos qqr
+        $path = public_path('assets/qrcodes');
+        FileFacade::cleanDirectory($path);
+        $notify = new DocumentUploadedController();
+        $users = User::with('canvasElement')
+            ->where('confirmation', 1)
+            ->whereNotNull('canvas_element_id')->get();
+
+        $seconds = 0;
+        foreach ($users as $user) {
+            $userId = $user->id;
+            $abbreviation = $user->abbreviation;
+            $name = $user->first_name;
+            $surname = $user->last_name;
+            $table = $user->canvasElement->name;
+
+            //creo un nuevo qqr
+            $imageName = 'qqr-' . time() + $seconds . '.svg';
+            $user->qqrname = $imageName;
+            QrCode::size(250)->errorCorrection('H')
+                // ->color(2, 204, 198)
+                ->generate($userId . ' ' . $abbreviation . $name . ' ' . $surname.' '. $table, public_path('assets/qrcodes/' . $imageName));
+            $url = url('/') . '/assets/qrcodes/' . $imageName;
+            $user->qqr = $url;
+            //actualizo al usuario
+            $user->update(); //actualizo el objeto
+
+            $seconds = $seconds + 5;
+            $notify->sendQr($userId, $name, $surname, $abbreviation, $seconds, $url);
+        }
+
+        return response()->json([
+            'data' => $url,
             'msg' => [
                 'summary' => 'Notificaciones enviadas',
                 'detail' => 'Los invitados fueron notificados exitósamente',

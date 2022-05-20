@@ -71,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::any('clear-user-table-id/{id}', [UserController::class, 'clearUserTableId']);
     Route::any('clear-all-table-id', [UserController::class, 'clearAllUsersTableId']);
     Route::any('send-users-mail', [UserController::class, 'sendUsersMail']);
+    Route::any('send-users-qr', [UserController::class, 'sendUsersQr']);
     Route::post('delete-users', [UserController::class, 'deleteSelectedUsers']);
     Route::post('search-by-parameters', [UserController::class, 'searchByParameters']);
     Route::post('import-users', [UserController::class, 'importUsers']);

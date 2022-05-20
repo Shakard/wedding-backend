@@ -21,12 +21,26 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'abbreviation', 'first_name', 'last_name', 'email', 'canvas_element_id', 'table_id', 'family_group', 'confirmation', 'phone', 'password', 'roles' , 'file' 
+        'abbreviation',
+        'first_name',
+        'last_name',
+        'email',
+        'canvas_element_id',
+        'table_id',
+        'family_group',
+        'confirmation',
+        'phone',
+        'password',
+        'roles',
+        'file',
+        'qqr',
+        'qqrname'
+
     ];
 
     protected $casts = [
         'confirmation' => 'boolean',
-      ];
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,7 +51,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function chair() {
+    public function chair()
+    {
         return $this->hasOne(Chair::class);
     }
 
