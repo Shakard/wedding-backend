@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CanvasElementController;
+use App\Http\Controllers\Admin\CatalogueController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChairController;
 use Illuminate\Support\Facades\Route;
@@ -113,6 +114,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('destroy-all-canvas-elements', [CanvasElementController::class, 'destroyAll']);
     Route::post('update-canvas-element', [CanvasElementController::class, 'updateCanvasElements']);
     Route::get('dd-tables', [CanvasElementController::class, 'getDinningTablesDropDown']);
+
+    //Catalogue Routes
+    Route::get('canvas-elements-types', [CatalogueController::class, 'getCanvasElementsTypes']);
 });
 
 
